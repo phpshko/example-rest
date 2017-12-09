@@ -1,0 +1,41 @@
+version: '3'
+services:
+  nginx:
+    restart: always
+    build:
+      context: .docker
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - ./app:/var/www/html/
+
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 8080:80
+
+  php:
+    restart: always
+    build:
+      context: .docker
+      dockerfile: Dockerfile-php
+    volumes:
+      - ./app:/var/www/html/
+      - .docker/supervisor/queue.conf:/etc/supervisor/conf.d/queue.conf:ro
+
+  db:
+    restart: always
+    build:
+      context: .docker
+      dockerfile: Dockerfile-mariadb
+    ports:
+      - 13306:3306
+    environment:
+      MYSQL_DATABASE: rest
+      MYSQL_USER: rest
+      MYSQL_PASSWORD: rest
+      MYSQL_ROOT_PASSWORD: root
+
+  rabbit:
+    restart: always
+    build:
+      context: .docker
+      dockerfile: Dockerfile-rabbitmq

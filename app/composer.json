@@ -1,0 +1,71 @@
+{
+    "name": "yiisoft/yii2-app-basic",
+    "description": "Yii 2 Basic Project Template",
+    "keywords": ["yii2", "framework", "basic", "project template"],
+    "homepage": "http://www.yiiframework.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1",
+        "yiisoft/yii2": "2.0.13.1",
+        "sizeg/yii2-jwt": "1.0.4",
+        "yiisoft/yii2-queue": "2.0.1",
+        "php-amqplib/php-amqplib": "2.7.0",
+        "yiisoft/yii2-imagine": "2.1.0",
+        "creocoder/yii2-flysystem": "0.9.0"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "2.0.12",
+        "yiisoft/yii2-gii": "2.0.5",
+        "guzzlehttp/guzzle": ">=4.1.4 <7.0",
+
+        "flow/jsonpath": "0.3.4",
+        "codeception/base": "2.3.6",
+        "codeception/verify": "0.3.3",
+        "codeception/specify": "0.4.6"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "yii\\composer\\Installer::postInstall"
+        ],
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject",
+            "yii\\composer\\Installer::postInstall"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "web/uploads": "0777",
+                    "yii": "0755",
+                    "yii_test": "0755"
+                }
+            ]
+        },
+        "yii\\composer\\Installer::postInstall": {
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

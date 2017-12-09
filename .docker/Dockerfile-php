@@ -1,0 +1,28 @@
+FROM php:7.2.0-fpm
+
+RUN apt-get update && apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        supervisor \
+    && pecl install xdebug-2.6.0alpha1 \
+	&& docker-php-ext-enable xdebug \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
+
+RUN docker-php-ext-install pdo pdo_mysql zip bcmath mbstring
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php
+RUN php -r "unlink('composer-setup.php');"
+RUN mkdir -p /usr/local/bin
+RUN mv composer.phar /usr/local/bin/composer
+
+RUN apt-get install -y git
+
+#for codeception
+RUN apt-get install -y mysql-client
+
+#EXPOSE 9000
+CMD ["php-fpm"]

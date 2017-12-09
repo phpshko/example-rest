@@ -1,0 +1,16 @@
+actor: ApiTester
+modules:
+    enabled:
+        - REST:
+            url: http://nginx:80
+            depends: PhpBrowser
+            part: [json]
+        - Asserts
+        - Db:
+            dsn: 'mysql:host=db_test;dbname=rest_test'
+            user: 'rest_test'
+            password: 'rest_test'
+            populate: true
+            cleanup: true
+            populator: '/var/www/html/yii_test migrate --interactive=0'
+

@@ -1,0 +1,11 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+- make init
+- docker-compose ps
+
+script:
+- make run-tests
