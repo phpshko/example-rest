@@ -13,14 +13,3 @@ Run all tests
 ```
 make run-tests
 ```
-
-
-Run bash in container
-```
-make nginx
-make rabbit
-make rabbit_test
-make db
-make db_test
-make php
-```
