@@ -144,11 +144,12 @@ class CreateUserCest extends BaseApiCest
 
         $response = json_decode($I->grabResponse(), true);
         $model = $response['model'];
+        $id = $model['id'];
 
         //Wait while rabbit processing
-        $waitRabbit = function ($seconds = 10) use ($I, $model) {
+        $waitRabbit = function ($seconds = 10) use ($I, $id) {
             for ($i = 0; $i < $seconds; $i++) {
-                $I->sendGET('/users/' . $model['id']);
+                $I->sendGET('/users/' . $id);
                 $response = json_decode($I->grabResponse(), true);
 
                 if (

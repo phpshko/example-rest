@@ -15,6 +15,8 @@ class CreateUserForm extends Model
     public $gender;
     public $photo;
 
+    public $imageWebPath;
+
     /**
      * @var User|null
      */
@@ -53,9 +55,14 @@ class CreateUserForm extends Model
         $user->age = $this->age;
         $user->gender = $this->gender;
 
-        if (!empty($this->photo) && !$user->uploadPhoto($this->photo)) {
-            $this->addError('Error upload photo');
-            return false;
+        $uploadService = new UploadUserPhotoService($this->photo);
+
+        if (!empty($this->photo)) {
+            if (!$uploadService->save()) {
+                $this->addError('Error upload photo');
+                return false;
+            }
+            $this->imageWebPath = $uploadService->getWebPath();
         }
 
         if (!$user->save()) {

@@ -167,19 +167,4 @@ class User extends ActiveRecord implements IdentityInterface
     {
         throw new \Exception('User::validateAuthKey() not implemented');
     }
-
-
-    /**
-     * @param $photo string in base64
-     * @return bool
-     */
-    public function uploadPhoto($photo)
-    {
-        $this->photo_small_path = null;
-        $this->photo_preview_path = null;
-
-        $uploadService = new UploadUserPhotoService($photo);
-        $this->photo_origin_path = $uploadService->getWebPath();
-        return $uploadService->save();
-    }
 }

@@ -16,6 +16,8 @@ class ConvertPhotoJob extends BaseObject implements JobInterface
 {
     public $userId;
 
+    public $imageWebPath;
+
     /**
      * @var ImageInterface
      */
@@ -36,16 +38,17 @@ class ConvertPhotoJob extends BaseObject implements JobInterface
     {
         $this->user = User::findIdentity($this->userId);
 
-        $this->image = Image::getImagine()->load(Yii::$app->fs->read($this->user->photo_origin_path));
+        $this->image = Image::getImagine()->load(Yii::$app->fs->read($this->imageWebPath));
 
-        $this->webDir = dirname($this->user->photo_origin_path);
-        $this->fileName = pathinfo($this->user->photo_origin_path, PATHINFO_FILENAME);
+        $this->webDir = dirname($this->imageWebPath);
+        $this->fileName = pathinfo($this->imageWebPath, PATHINFO_FILENAME);
 
+        $this->user->photo_origin_path = $this->imageWebPath;
         $this->saveSmallPhoto();
         $this->savePreviewPhoto();
 
         if (!$this->user->save()) {
-            $errorText = "Save failed: User id - $this->user->id , errors - " . print_r($this->user->errors, true);
+            $errorText = 'Save failed: User id - ' . $this->user->id . ' , errors - ' . print_r($this->user->errors, true);
             Yii::error($errorText);
             echo $errorText . PHP_EOL;
         }

@@ -123,16 +123,13 @@ class SignupCest extends BaseApiCest
         $I->seeResponseContainsJson(['model' => ['name' => $name]]);
 
         $response = json_decode($I->grabResponse(), true);
-        $model = $response['model'];
-        $I->assertContains('uploads', $model['photo_origin_path'] ?? null);
-
         $token = $response['token'];
         $I->assertNotNull($token);
 
         $I->amBearerAuthenticated($token);
 
         //Wait while rabbit processing
-        $waitRabbit = function ($seconds = 10) use ($I, $model) {
+        $waitRabbit = function ($seconds = 10) use ($I) {
             for ($i = 0; $i < $seconds; $i++) {
                 $I->sendGET('/profile');
                 $response = json_decode($I->grabResponse(), true);

@@ -48,9 +48,10 @@ class UserController extends Controller
         $model->load(Yii::$app->request->bodyParams, '');
 
         if ($model->save()) {
-            if (!empty($model->user->photo_origin_path)) {
+            if (!empty($model->imageWebPath)) {
                 Yii::$app->queue->push(new ConvertPhotoJob([
-                    'userId' => $model->user->id,
+                    'userId'       => $model->user->id,
+                    'imageWebPath' => $model->imageWebPath,
                 ]));
             }
 
